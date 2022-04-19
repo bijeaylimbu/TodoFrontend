@@ -1,10 +1,10 @@
-import  React from 'react';
+import React, { useState } from 'react';
 import Button from "@material-ui/core/Button";
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import TextField from "@material-ui/core/TextField";
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-
+import axiosInstance from "../../utils/helpers/axiosInstance";
 const useStyles = makeStyles({
     root: {
         background: 'linear-gradient(45deg, gray 30%, black 90%)',
@@ -21,43 +21,41 @@ const useStyles = makeStyles({
 });
 
 
-const TodoCreator = ({ theme, todo, setTodo, clearInput, inputRef, isInputEmpty, preventSubmit }) => {
+const TodoCreator = () => {
+    const [description, setDescription] = useState("");
+    console.log(description)
+    const [isCompleted, setIsCompleted] = useState();
     const classes = useStyles();
-
+    const onSubmit = async (e) => {
+        e.preventDefault();
+      await  axiosInstance.post("/todo", {
+        description:description,
+        isCompleted:isCompleted
+        });
+    }
     return (
         <div className="form__input">
-            <ThemeProvider theme={theme}>
-                <FormControl   className={classes.label}>
-                    <TextField
-                        id="outlined-basic"
-                        label="What's need to be done?" // better accessibility with Material UI
-                        value={todo}
-                        variant="outlined"
-                        onChange={(e) => setTodo(e.target.value)}
-                        onFocus={clearInput}
-                        ref={inputRef}
-                        aria-describedby="component-error-text"
-                        onKeyPress={preventSubmit}
-                    />
-
-                    { !isInputEmpty ?
-                        <></>
-                        :
-                        <>
-                            <FormHelperText id="component-error-text">Task can't be empty</FormHelperText>
-                        </>
-                    }
-                </FormControl>
-                <Button
-                    type="submit"
-                    alt="add-note"
-                    className={classes.root}
-                    onKeyPress={preventSubmit}
-                >
-                    Add task
-                </Button>
+            <ThemeProvider>
+                    <FormControl className={classes.label}>
+                        <TextField
+                            id="outlined-basic"
+                            label="What's need to be done?" // better accessibility with Material UI
+                            value={description}
+                            variant="outlined"
+                            onChange={(e) => setDescription(e.target.value)}
+                            aria-describedby="component-error-text"
+                        />
+                    </FormControl>
+                    <Button
+                        type="submit"
+                        alt="add-note"
+                        className={classes.root}
+                    onClick={onSubmit}
+                    >
+                        Add task
+                    </Button>
             </ThemeProvider>
         </div>
     )
 }
-export  default TodoCreator;
+export default TodoCreator;

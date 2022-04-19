@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const TodoList = ({ theme, todos, completeTodo, editTodo, deleteTodo, saveTodo, noteRef, preventSubmit }) => {
+const TodoList = ({ theme, todos }) => {
     const classes = useStyles();
     const [checked, setChecked] = React.useState([0]);
     let UniqKey = 123;
@@ -39,7 +39,6 @@ const TodoList = ({ theme, todos, completeTodo, editTodo, deleteTodo, saveTodo, 
         }
 
         setChecked(newChecked);
-        completeTodo(inx);
     };
 
 
@@ -64,7 +63,7 @@ const TodoList = ({ theme, todos, completeTodo, editTodo, deleteTodo, saveTodo, 
                                     disableRipple
                                     inputProps={{ 'aria-labelledby': labelId }}
                                     onClick={handleToggle(todo, inx)}
-                                    onKeyPress={preventSubmit}
+
                                 />
                             </ListItemIcon>
                             {
@@ -79,7 +78,7 @@ const TodoList = ({ theme, todos, completeTodo, editTodo, deleteTodo, saveTodo, 
                                             <IconButton
                                                 edge="end"
                                                 aria-label="edit"
-                                                onClick={() => editTodo(inx)}
+
                                             >
                                                 <EditIcon />
                                             </IconButton>
@@ -91,24 +90,22 @@ const TodoList = ({ theme, todos, completeTodo, editTodo, deleteTodo, saveTodo, 
                                             htmlFor="task" // better accessibility with HTML
                                             className="visuallyhidden"
                                         >
-                                         {todo.description}
+                                            {todo.description}
                                         </label>
                                         <input
                                             className="form__edit-input"
                                             defaultValue={todo.description}
-                                            ref={(element) => noteRef.current[inx] = element}
-                                            onKeyPress={preventSubmit}
                                             id="task"
                                         />
                                         <ListItemIcon>
-                                            <IconButton onClick={() => saveTodo(inx)} edge="end" aria-label="delete">
+                                            <IconButton edge="end" aria-label="delete">
                                                 <BookmarkIcon />
                                             </IconButton>
                                         </ListItemIcon>
                                     </>
                             }
                             <ListItemSecondaryAction>
-                                <IconButton onClick={() => deleteTodo(inx)} edge="end" aria-label="delete">
+                                <IconButton edge="end" aria-label="delete">
                                     <DeleteIcon />
                                 </IconButton>
                             </ListItemSecondaryAction>
