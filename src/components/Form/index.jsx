@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoCreator from "../FormInput/index";
 import TodoList from "../TodoList/index";
 import { createMuiTheme } from "@material-ui/core/styles";
@@ -12,7 +12,6 @@ const theme = createMuiTheme({
 
 const Form = () => {
     const [todos, setTodos] = useState([]);
-    console.log(todos)
     useEffect(() => {
         todoService.getAllTodos()
             .then((res) => setTodos(res.data));

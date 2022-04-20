@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import Button from "@material-ui/core/Button";
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import TextField from "@material-ui/core/TextField";
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import axiosInstance from "../../utils/helpers/axiosInstance";
+import todoService from '../../services/todo.service';
 const useStyles = makeStyles({
     root: {
         background: 'linear-gradient(45deg, gray 30%, black 90%)',
@@ -19,41 +18,36 @@ const useStyles = makeStyles({
         width: '80%'
     }
 });
-
-
 const TodoCreator = () => {
     const [description, setDescription] = useState("");
-    console.log(description)
     const [isCompleted, setIsCompleted] = useState();
     const classes = useStyles();
     const onSubmit = async (e) => {
         e.preventDefault();
-      await  axiosInstance.post("/todo", {
-        description:description,
-        isCompleted:isCompleted
-        });
+        todoService.createTodo(description, isCompleted);
+       window.location.reload();
     }
     return (
         <div className="form__input">
             <ThemeProvider>
-                    <FormControl className={classes.label}>
-                        <TextField
-                            id="outlined-basic"
-                            label="What's need to be done?" // better accessibility with Material UI
-                            value={description}
-                            variant="outlined"
-                            onChange={(e) => setDescription(e.target.value)}
-                            aria-describedby="component-error-text"
-                        />
-                    </FormControl>
-                    <Button
-                        type="submit"
-                        alt="add-note"
-                        className={classes.root}
+                <FormControl className={classes.label}>
+                    <TextField
+                        id="outlined-basic"
+                        label="What's need to be done?" // better accessibility with Material UI
+                        value={description}
+                        variant="outlined"
+                        onChange={(e) => setDescription(e.target.value)}
+                        aria-describedby="component-error-text"
+                    />
+                </FormControl>
+                <Button
+                    type="submit"
+                    alt="add-note"
+                    className={classes.root}
                     onClick={onSubmit}
-                    >
-                        Add task
-                    </Button>
+                >
+                    Add task
+                </Button>
             </ThemeProvider>
         </div>
     )
